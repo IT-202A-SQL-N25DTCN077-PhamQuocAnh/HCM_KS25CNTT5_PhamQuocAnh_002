@@ -27,13 +27,11 @@ create table if not exists enrollments(
 );
 
 create table if not exists enrollment_detail(
-	student_id int not null,
     enrollment_id int not null,
     course_id int not null,
-    unique(student_id, course_id),
     status varchar(15) not null,
-    final_score decimal (3,2) not null check(final_score < 10 and final_score > 0),
-    foreign key (student_id) references students(student_id) on delete cascade ,
+    final_score decimal(3,2) not null check(final_score >= 0 and final_score <= 10),
+    primary key(enrollment_id, course_id),
     foreign key (enrollment_id) references enrollments(enrollment_id) on delete cascade,
     foreign key (course_id) references course(course_id) on delete cascade
 );
@@ -66,21 +64,24 @@ insert into students (student_id, fullname, email, phone, birthday) values
 (2,'Trần Thị Bích','bich@gmail.com','0912345678','2001-05-20'),
 (3,'Lê Hoàng Dũng','dung@gmail.com','0923456789','1999-11-08'),
 (4,'Phạm Minh Khoa','khoa@gmail.com','0934567890','2000-07-22'),
-(5,'Huỳnh Thanh Mai','mai@gmail.com','0945678901','2002-03-10');
+(5,'Huỳnh Thanh Mai','mai@gmail.com','0945678901','2002-03-10'),
+(6,'Võ Hoàng Nam', null, '0956789012', '2001-12-01');
 
 insert into enrollments (student_id, payment) VALUES
 (1,'Credit Card'),
 (2,'Bank Transfer'),
 (3,'Cash'),
 (4,'Credit Card'),
-(5,'Cash');
+(5,'Cash'),
+(6,'Bank Transfer');
 
-insert into enrollment_detail(student_id, course_id,enrollment_id, status, final_score) values
-(1, 1 , 2,'Dang hoc',8.50),
-(2, 2 , 1,'Dang Hoc',9.00),
-(3, 3 , 3,'Bao luu', 7.50),
-(4, 4 , 4,'Dang hoc',8.75),
-(5, 5 , 1,'Bao Luu',4.00);
+insert into enrollment_detail(enrollment_id, course_id, status, final_score) values
+(1, 1, 'Dang hoc', 8.50),
+(2, 2, 'Dang hoc', 9.00),
+(3, 3, 'Bao luu', 7.50),
+(4, 6, 'Dang hoc', 8.75),
+(5, 7, 'Bao luu', 4.00),
+(6, 1, 'Dang hoc', 6.50);
 
 update course 
 set tuititon_fee = tuititon_fee * 0.9 
